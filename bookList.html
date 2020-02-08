@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<div id="app">
+  <div v-if="books.length">
+    <h2>TotalPrice:{{allPrice | showPrice}}</h2>
+    <table>
+      <thead>
+        <th></th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Price</th>
+        <th>Numbers</th>
+        <th>Operation</th>
+      </thead>
+      <tbody>
+        <tr v-for="(book,index) in books">
+          <td>{{book.id}}</td>
+          <td>{{book.name}}</td>
+          <td>{{book.date}}</td>
+          <td>{{book.price | showPrice(book.price)}}</td>
+          <td>
+            <button @click="minus(index)" :disabled="book.numbers <= 1">-</button>
+            {{book.numbers}}
+            <button @click="plus(index)">+</button>
+          </td>
+          <td><button @click="remove(index)">remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 v-else>购物车被你吃掉了</h2>
+</div>
+
+<body>
+  <script src="./js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: "#app",
+      data: {
+        books: [
+          {
+            id: 1,
+            name: "Java",
+            date: "2019-2-1",
+            price: 89,
+            numbers: 1
+          },
+          {
+            id: 2,
+            name: "Python",
+            date: "2019-2-1",
+            price: 12,
+            numbers: 1
+          },
+          {
+            id: 3,
+            name: "Go",
+            date: "2019-2-1",
+            price: 23,
+            numbers: 1
+          }
+        ]
+      },
+      methods: {
+        plus(index) {
+          return this.books[index].numbers++
+        },
+        minus(index) {
+          return this.books[index].numbers--
+        },
+        remove(index) {
+          this.books.splice(index, 1)
+        }
+
+      },
+      computed:{
+        allPrice(){
+          let bookPrice =0;
+          for(let i =0;i<this.books.length;i++){
+            bookPrice += this.books[i].price*this.books[i].numbers 
+          }
+          return bookPrice
+        }
+      },
+      filters: {
+        showPrice(price) {
+          return "$" + price.toFixed(2)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
